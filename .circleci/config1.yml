@@ -1,0 +1,24 @@
+version: 2.1
+
+setup: true
+
+orbs:
+  continuation: circleci/continuation@0.1.2
+
+jobs:
+  setup:
+    docker:
+      - image: cimg/ruby:2.7.4
+    steps:
+      - checkout
+      - run:
+          name: Generate config
+          command: |
+            ruby .circleci/generate_config.rb
+      - continuation/continue:
+          configuration_path: .circleci/config-generated.yml
+
+workflows:
+  setup:
+    jobs:
+      - setup
